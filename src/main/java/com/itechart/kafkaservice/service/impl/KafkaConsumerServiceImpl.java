@@ -31,18 +31,12 @@ public class KafkaConsumerServiceImpl implements KafkaConsumerService {
 
     @Override
     public void createTopic(String topic) {
-//        Map<String, TopicDescription> description = kafkaAdmin.describeTopics(topic); //throws exception
-//        if (!description.isEmpty()) return;
-
         kafkaAdmin.createOrModifyTopics(
                 TopicBuilder
                         .name(topic)
                         .replicas(1)
                         .build()
         );
-
-//        listener = newListenerContainerFor(topic); //unneeded
-//        listener.start();
     }
 
     @Override
@@ -92,17 +86,6 @@ public class KafkaConsumerServiceImpl implements KafkaConsumerService {
         createTopic(topic);
         TopicDescription topicDescription = kafkaAdmin.describeTopics(topic).get(topic);
         System.out.println(topicDescription.name() + " has " + topicDescription.partitions().size() + " prttns");
-
-//        template.send(topic, new EventDto("in-test-location", LocalDateTime.now()));
-
-//        reassignPartitionsAmount(topic, 7);
-//        System.out.println(topicDescription.name() + " has " + topicDescription.partitions().size() + " prttns");
-//
-//        reassignPartitionsAmount(topic, 3);
-//        System.out.println(topicDescription.name() + " has " + topicDescription.partitions().size() + " prttns");
-
-//            unsubscribe(topic);
-//        template.send(topic, new EventDto("out-test-location", LocalDateTime.now()));
 
         subscribe(topic);
         Thread t = new Thread(() -> {
